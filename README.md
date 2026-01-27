@@ -1,4 +1,4 @@
-# Group Expense Splitter
+# Contriz
 
 A minimal MERN web app to split group expenses and generate optimized settlement suggestions.
 

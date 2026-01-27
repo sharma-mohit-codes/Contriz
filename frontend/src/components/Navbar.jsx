@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav style={styles.navbar}>
       <div style={styles.container}>
         <Link to="/" style={styles.logo}>
-          💰 Expense Splitter
+          💰 Contriz
         </Link>
 
         {isAuthenticated && (
