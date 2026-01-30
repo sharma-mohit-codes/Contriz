@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { groupAPI, expenseAPI } from '../services/api';
 import ExpenseList from '../components/ExpenseList';
-import { useEffect, useCallback } from "react";
 
 const GroupDetail = () => {
   const { id } = useParams();
