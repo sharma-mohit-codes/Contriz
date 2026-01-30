@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { groupAPI, expenseAPI } from '../services/api';
+import { useEffect, useCallback } from "react";
 
 const AddExpense = () => {
   const { id } = useParams();
@@ -16,9 +17,10 @@ const AddExpense = () => {
 
   useEffect(() => {
     fetchGroup();
-  }, [id]);
+  }, [fetchGroup]);
+  
 
-  const fetchGroup = async () => {
+  const fetchGroup = useCallback(async () => {
     try {
       const response = await groupAPI.getOne(id);
       setGroup(response.data);
@@ -30,7 +32,7 @@ const AddExpense = () => {
     } catch (error) {
       console.error('Error fetching group:', error);
     }
-  };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

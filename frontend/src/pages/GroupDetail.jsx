@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { groupAPI, expenseAPI } from '../services/api';
 import ExpenseList from '../components/ExpenseList';
+import { useEffect, useCallback } from "react";
 
 const GroupDetail = () => {
   const { id } = useParams();
@@ -15,9 +16,10 @@ const GroupDetail = () => {
 
   useEffect(() => {
     fetchGroupData();
-  }, [id]);
-
-  const fetchGroupData = async () => {
+  }, [fetchGroupData]);
+  
+  
+  const fetchGroupData = useCallback(async () => {
     try {
       const [groupRes, expensesRes, balancesRes, settlementsRes] = await Promise.all([
         groupAPI.getOne(id),
@@ -35,7 +37,7 @@ const GroupDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  },[]);
 
   if (loading) return <div className="container">Loading...</div>;
   if (!group) return <div className="container">Group not found</div>;
