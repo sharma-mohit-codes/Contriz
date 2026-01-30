@@ -13,10 +13,7 @@ const GroupDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('expenses');
 
-  useEffect(() => {
-    fetchGroupData();
-  }, [fetchGroupData]);
-  
+
   
   const fetchGroupData = useCallback(async () => {
     try {
@@ -37,6 +34,11 @@ const GroupDetail = () => {
       setLoading(false);
     }
   },[]);
+
+  useEffect(() => {
+    fetchGroupData();
+  }, [fetchGroupData]);
+  
 
   if (loading) return <div className="container">Loading...</div>;
   if (!group) return <div className="container">Group not found</div>;

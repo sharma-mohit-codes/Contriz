@@ -14,11 +14,6 @@ const AddExpense = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  useEffect(() => {
-    fetchGroup();
-  }, [fetchGroup]);
-  
-
   const fetchGroup = useCallback(async () => {
     try {
       const response = await groupAPI.getOne(id);
@@ -32,6 +27,11 @@ const AddExpense = () => {
       console.error('Error fetching group:', error);
     }
   }, []);
+
+  useEffect(() => {
+    fetchGroup();
+  }, [fetchGroup]);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
