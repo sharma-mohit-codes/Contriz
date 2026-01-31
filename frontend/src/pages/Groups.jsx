@@ -13,12 +13,12 @@ const Groups = () => {
     fetchGroups();
   }, []);
 
-  const handleDeleteGroup = async () => {
+  const handleDeleteGroup = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this group?");
     if (!confirmDelete) return;
   
     try {
-      await groupAPI.delete(group._id);
+      await groupAPI.delete(id);
       alert("Group deleted");
       navigate('/dashboard');
     } catch (err) {
@@ -73,7 +73,7 @@ const Groups = () => {
               onClick={() => navigate(`/groups/${group._id}`)}
             >
               <h3>{group.name}</h3><button
-                onClick={handleDeleteGroup}
+                onClick={handleDeleteGroup(group._id)}
                 style={{
                   background: 'red',
                   color: 'white',
