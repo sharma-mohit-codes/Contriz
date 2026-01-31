@@ -35,11 +35,11 @@ const Groups = () => {
       </div>
 
       {showCreateForm && (
-        <CreateGroupForm 
+        <CreateGroupForm
           onSuccess={() => {
             fetchGroups();
             setShowCreateForm(false);
-          }} 
+          }}
         />
       )}
 
@@ -51,13 +51,26 @@ const Groups = () => {
       ) : (
         <div className="grid grid-3">
           {groups.map(group => (
-            <div 
-              key={group._id} 
-              className="card" 
-              style={{ cursor: 'pointer' }} 
+            <div
+              key={group._id}
+              className="card"
+              style={{ cursor: 'pointer' }}
               onClick={() => navigate(`/groups/${group._id}`)}
             >
-              <h3>{group.name}</h3>
+              <h3>{group.name}</h3><button
+                onClick={handleDeleteGroup}
+                style={{
+                  background: 'red',
+                  color: 'white',
+                  padding: '6px 12px',
+                  border: 'none',
+                  borderRadius: '4px',
+                  marginLeft: '10px'
+                }}
+              >
+                Delete Group
+              </button>
+
               {group.description && <p style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>{group.description}</p>}
               <div style={{ marginTop: '15px', fontSize: '14px', color: '#888' }}>
                 👥 {group.members.length} members
@@ -103,7 +116,7 @@ const CreateGroupForm = ({ onSuccess }) => {
     <div className="card mb-20">
       <h3>Create New Group</h3>
       {error && <div className="error">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Group Name *</label>

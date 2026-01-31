@@ -34,7 +34,8 @@ export const groupAPI = {
   create: (data) => api.post('/groups', data),
   getAll: () => api.get('/groups'),
   getOne: (id) => api.get(`/groups/${id}`),
-  addMember: (groupId, email) => api.post(`/groups/${groupId}/members`, { email })
+  addMember: (groupId, email) => api.post(`/groups/${groupId}/members`, { email }),
+  delete: (id) => api.delete(`/groups/${id}`)
 };
 
 // Expense APIs
