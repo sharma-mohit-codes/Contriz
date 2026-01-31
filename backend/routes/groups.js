@@ -4,6 +4,7 @@ const User = require('../models/User');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
+const Expense = require('../models/Expense');
 
 // Create group
 router.post('/', auth, async (req, res) => {
@@ -110,5 +111,29 @@ router.post('/:id/members', auth, async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+// Delete group
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.id);
+
+    if (!group) {
+      return res.status(404).json({ message: 'Group not found' });
+    }
+
+    // Optional: only creator can delete
+    if (group.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    await Expense.deleteMany({ group: group._id }); // remove related expenses
+    await group.deleteOne();
+
+    res.json({ message: 'Group deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 module.exports = router;
