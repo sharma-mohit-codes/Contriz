@@ -13,21 +13,6 @@ const GroupDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('expenses');
 
-
-  const handleDeleteGroup = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this group?");
-    if (!confirmDelete) return;
-  
-    try {
-      await groupAPI.delete(group._id);
-      alert("Group deleted");
-      navigate('/dashboard');
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete group");
-    }
-  };
-  
   const fetchGroupData = useCallback(async () => {
     try {
       const [groupRes, expensesRes, balancesRes, settlementsRes] = await Promise.all([

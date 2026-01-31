@@ -8,10 +8,25 @@ const Groups = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     fetchGroups();
   }, []);
 
+  const handleDeleteGroup = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this group?");
+    if (!confirmDelete) return;
+  
+    try {
+      await groupAPI.delete(group._id);
+      alert("Group deleted");
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete group");
+    }
+  };
+  
   const fetchGroups = async () => {
     try {
       const response = await groupAPI.getAll();
