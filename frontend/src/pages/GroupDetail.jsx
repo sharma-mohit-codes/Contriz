@@ -31,12 +31,11 @@ const GroupDetail = () => {
     } finally {
       setLoading(false);
     }
-  },[]);
+  }, [id]);
 
   useEffect(() => {
     fetchGroupData();
   }, [fetchGroupData]);
-  
 
   if (loading) return <div className="container">Loading...</div>;
   if (!group) return <div className="container">Group not found</div>;
@@ -106,7 +105,10 @@ const GroupDetail = () => {
           >
             + Add Expense
           </button>
-          <ExpenseList expenses={expenses} />
+          <ExpenseList
+            expenses={expenses}
+            onExpenseDeleted={fetchGroupData}
+          />
         </>
       )}
 

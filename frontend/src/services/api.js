@@ -43,7 +43,8 @@ export const expenseAPI = {
   create: (data) => api.post('/expenses', data),
   getByGroup: (groupId) => api.get(`/expenses/group/${groupId}`),
   getBalances: (groupId) => api.get(`/expenses/group/${groupId}/balances`),
-  getSettlements: (groupId) => api.get(`/expenses/group/${groupId}/settle`)
+  getSettlements: (groupId) => api.get(`/expenses/group/${groupId}/settle`),
+  delete: (id) => api.delete(`/expenses/${id}`)
 };
 
 export default api;

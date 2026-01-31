@@ -112,8 +112,8 @@ router.post('/:id/members', auth, async (req, res) => {
   }
 });
 
-// Delete group
-router.delete('/:id', authMiddleware, async (req, res) => {
+// Delete group - only the creator (owner) can delete
+router.delete('/:id', auth, async (req, res) => {
   try {
     const group = await Group.findById(req.params.id);
 
@@ -121,9 +121,9 @@ router.delete('/:id', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Group not found' });
     }
 
-    // Optional: only creator can delete
-    if (group.createdBy.toString() !== req.user.id) {
-      return res.status(403).json({ message: 'Not authorized' });
+    // Only creator can delete
+    if (group.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Only the group creator can delete this group' });
     }
 
     await Expense.deleteMany({ group: group._id }); // remove related expenses
@@ -134,6 +134,5 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 
 module.exports = router;

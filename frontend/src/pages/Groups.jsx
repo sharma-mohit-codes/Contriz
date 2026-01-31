@@ -8,25 +8,40 @@ const Groups = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const navigate = useNavigate();
 
+  // Token payload is { userId: ... } — match that exactly
+  const getCurrentUserId = () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.userId || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const currentUserId = getCurrentUserId();
 
   useEffect(() => {
     fetchGroups();
   }, []);
 
-  const handleDeleteGroup = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this group?");
+  const handleDeleteGroup = async (e, id) => {
+    e.stopPropagation();
+
+    const confirmDelete = window.confirm('Are you sure you want to delete this group? All expenses in this group will also be deleted.');
     if (!confirmDelete) return;
-  
+
     try {
       await groupAPI.delete(id);
-      alert("Group deleted");
-      navigate('/dashboard');
+      alert('Group deleted successfully');
+      fetchGroups();
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete group");
+      const msg = err.response?.data?.message || 'Failed to delete group';
+      alert(msg);
     }
   };
-  
+
   const fetchGroups = async () => {
     try {
       const response = await groupAPI.getAll();
@@ -72,19 +87,28 @@ const Groups = () => {
               style={{ cursor: 'pointer' }}
               onClick={() => navigate(`/groups/${group._id}`)}
             >
-              <h3>{group.name}</h3><button
-                onClick={handleDeleteGroup(group._id)}
-                style={{
-                  background: 'red',
-                  color: 'white',
-                  padding: '6px 12px',
-                  border: 'none',
-                  borderRadius: '4px',
-                  marginLeft: '10px'
-                }}
-              >
-                Delete Group
-              </button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3>{group.name}</h3>
+
+                {/* .toString() on both sides: createdBy._id is a Mongoose ObjectId, currentUserId is a string */}
+                {group.createdBy && group.createdBy._id.toString() === currentUserId && (
+                  <button
+                    onClick={(e) => handleDeleteGroup(e, group._id)}
+                    style={{
+                      background: 'red',
+                      color: 'white',
+                      padding: '6px 12px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      flexShrink: 0
+                    }}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
 
               {group.description && <p style={{ color: '#666', fontSize: '14px', marginTop: '8px' }}>{group.description}</p>}
               <div style={{ marginTop: '15px', fontSize: '14px', color: '#888' }}>
